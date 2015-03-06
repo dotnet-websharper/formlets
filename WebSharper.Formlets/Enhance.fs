@@ -24,7 +24,7 @@ open WebSharper.JavaScript
 open WebSharper.Html.Client
 open WebSharper.Html.Client.Events
 
-module H = WebSharper.Html.Client.Default
+module H = WebSharper.Html.Client.Tags
 
 /// Defines formlets and their operations.
 module Enhance =
