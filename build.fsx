@@ -2,8 +2,9 @@
 open IntelliFactory.Build
 
 let bt =
-    BuildTool().PackageId("WebSharper.Formlets", "3.0")
-    |> fun bt -> bt.WithFramework(bt.Framework.Net40)
+    BuildTool().PackageId("WebSharper.Formlets")
+        .VersionFrom("WebSharper")
+        .WithFramework(fun fw -> fw.Net40)
 
 let if_formlets =
     bt.WebSharper.Library("IntelliFactory.Formlets")
