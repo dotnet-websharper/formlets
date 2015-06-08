@@ -139,7 +139,7 @@ module Enhance =
                     H.Input[Attr.Type "button"] -< [
                         Attr.Class CssConstants.SubmitButtonClass; Attr.Value label
                     ]
-                    |>! Events.OnClick (fun _ _ ->
+                    |>! OnClick (fun _ _ ->
                         incr count
                         state.Trigger (Success count.Value)
                     )

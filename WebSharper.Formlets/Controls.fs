@@ -66,7 +66,7 @@ module Controls =
                 state.Trigger sValue
             reset()
             body
-            |> Events.OnChange (fun _  ->
+            |> OnChange (fun _  ->
                 if not readOnly then
                     let value = body.Value
                     aVls.[int value]
@@ -112,8 +112,8 @@ module Controls =
             if control.Value <> !value then
                 value := control.Value
                 f ()
-        Events.OnChange (fun _ -> up ()) control
-        Events.OnKeyUp (fun _ _ -> up ()) control
+        OnChange (fun _ -> up ()) control
+        OnKeyUp (fun _ _ -> up ()) control
         control.Dom?oninput <- up
 
     [<JavaScript>]
@@ -164,7 +164,7 @@ module Controls =
                     else
                         []
                 Input [Attr.Type "checkbox"; Attr.Class CssConstants.InputCheckboxClass] -< readOnlyAtts
-                |>! Events.OnClick (fun cb _ ->
+                |>! OnClick (fun cb _ ->
                     if not readOnly then
                         JQuery.JQuery.Of(cb.Body).Prop<bool>("checked")
                         |> Success
@@ -276,7 +276,7 @@ module Controls =
                     // Check the button if default value is given
                     resetRB rb value ix
                     rb
-                    |> Events.OnClick (fun _ _ ->
+                    |> OnClick (fun _ _ ->
                         if not readOnly then
                             state.Trigger(Success value)
                     )
@@ -332,7 +332,7 @@ module Controls =
             let count = ref 0
             let body =
                 genElem ()
-                |>! Events.OnClick (fun _ _ ->
+                |>! OnClick (fun _ _ ->
                     state.Trigger (Success count.Value)
                     incr count
                 )
