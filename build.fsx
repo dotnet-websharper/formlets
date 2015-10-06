@@ -4,6 +4,7 @@ open IntelliFactory.Build
 let bt =
     BuildTool().PackageId("WebSharper.Formlets")
         .VersionFrom("WebSharper")
+        .WithFSharpVersion(FSharpVersion.FSharp30)
         .WithFramework(fun fw -> fw.Net40)
 
 let if_formlets =
@@ -11,7 +12,7 @@ let if_formlets =
         .SourcesFromProject()
         .References(fun r ->
             [
-                r.NuGet("IntelliFactory.Reactive").Reference()
+                r.NuGet("IntelliFactory.Reactive").ForceFoundVersion().Reference()
             ])
 
 let ws_formlets =
@@ -19,7 +20,8 @@ let ws_formlets =
         .SourcesFromProject()
         .References(fun r ->
             [
-                r.NuGet("IntelliFactory.Reactive").Reference()
+                r.NuGet("IntelliFactory.Reactive").ForceFoundVersion().Reference()
+                r.NuGet("WebSharper.Html").ForceFoundVersion().Reference()
                 r.Project if_formlets
             ])
         .Embed(
@@ -38,6 +40,7 @@ let tests =
         .References(fun r ->
             [
                 r.NuGet("IntelliFactory.Reactive").Reference()
+                r.NuGet("WebSharper.Html").Reference()
                 r.Project if_formlets
                 r.Project ws_formlets
             ])
