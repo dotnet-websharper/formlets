@@ -20,17 +20,18 @@
 
 namespace IntelliFactory.Formlets.Base
 
+open WebSharper
+
+[<JavaScript>]
 type Result<'T> =
     | Success of 'T
     | Failure of list<string>
     with
-        [<ReflectedDefinition>]
         static member Join (res: Result<Result<'T>>) =
             match res with
             | Success s     -> s
             | Failure fs    -> Failure fs
 
-        [<ReflectedDefinition>]
         static member Apply (f: Result<'T -> 'U>) (r: Result<'T>) : Result<'U> =
             match f, r with
             | Success f, Success v      ->
@@ -41,14 +42,12 @@ type Result<'T> =
                 Failure (fs1 @ fs2)
             | Failure fs , _            ->
                 Failure fs
-        [<ReflectedDefinition>]
         static member OfOption (o: option<'T>) : Result<'T> =
             match o with
             | Some v    -> Success v
             | None      -> Failure []
 
         /// Maps the value.
-        [<ReflectedDefinition>]
         static member Map (f: 'T -> 'U) (res: Result<'T>) : Result<'U> =
             match res with
             | Success v     -> Success (f v)
@@ -57,7 +56,6 @@ type Result<'T> =
 
         /// Converts a sequence of results into a result with a
         /// a sequence of values.
-        [<ReflectedDefinition>]
         static member Sequence (rs : seq<Result<'T>>) : Result<list<'T>> =
             let merge (rs : Result<List<'T>>) (r : Result<'T>) =
                 match rs with
