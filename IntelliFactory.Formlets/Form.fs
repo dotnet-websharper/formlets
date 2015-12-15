@@ -20,9 +20,11 @@
 
 namespace IntelliFactory.Formlets.Base
 
+open WebSharper
 open System
 
 /// Represent a form
+[<JavaScript>]
 type Form<'Body,'State> =
     {
         Body    : IObservable<Tree.Edit<'Body>>
@@ -31,5 +33,5 @@ type Form<'Body,'State> =
         State   : IObservable<Result<'State>>
     }
         interface IDisposable with
-            [<ReflectedDefinition>]
+            [<JavaScript>]
             member this.Dispose() = this.Dispose()

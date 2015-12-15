@@ -20,6 +20,7 @@
 
 namespace IntelliFactory.Formlets.Base
 
+open WebSharper
 open System
 open IntelliFactory.Reactive
 
@@ -37,9 +38,9 @@ type Container<'Body> =
         Remove : seq<'Body> -> unit
     }
 
-type internal D[<ReflectedDefinition>]() =
+[<JavaScript>]
+type internal D() =
     interface IDisposable with
-        [<ReflectedDefinition>]
         member this.Dispose () = ()
 
 type Reactive =
@@ -49,21 +50,19 @@ type Reactive =
 
 /// Defines layout managers and their associated operations.
 /// TODO: make private (error with WS???)
-type LayoutUtils [<ReflectedDefinition>]  (R: Reactive) =
+[<JavaScript>]
+type LayoutUtils (R: Reactive) =
 
-//    [<ReflectedDefinition>]
+//    [<JavaScript>]
 //    static member New(r: IReactive) =
 //        new LayoutUtils({Reactive = r})
 
-    [<ReflectedDefinition>]
     member this.Default<'B>() : Layout<'B> =
         { Apply = fun _ -> None }
 
-    [<ReflectedDefinition>]
     member this.Delay (f: unit -> Layout<'Body>) =
         { Apply = fun x -> f().Apply x }
 
-    [<ReflectedDefinition>]
     member this.New (container: unit -> Container<'Body>) : Layout<'Body> =
         {
             Apply = fun event ->

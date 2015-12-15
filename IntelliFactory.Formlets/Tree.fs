@@ -23,15 +23,16 @@ namespace IntelliFactory.Formlets.Base
 /// Defines a binary tree structure and its associated operations.
 /// In particular, defines a derivative type to describe tree edits.
 module Tree =
+    open WebSharper
     open System.Collections
     open System.Collections.Generic
 
+    [<JavaScript>]
     type Tree<'T> =
         | Empty
         | Leaf of 'T
         | Fork of Tree<'T> * Tree<'T>
 
-        [<ReflectedDefinition>]
         member this.Sequence =
             match this with
             | Empty -> Seq.empty
@@ -39,16 +40,13 @@ module Tree =
             | Fork (x, y) -> Seq.append x.Sequence y.Sequence
 
         interface IEnumerable with
-            [<ReflectedDefinition>]
             member this.GetEnumerator() =
                 this.Sequence.GetEnumerator() :> _
 
         interface IEnumerable<'T> with
-            [<ReflectedDefinition>]
             member this.GetEnumerator() =
                 this.Sequence.GetEnumerator()
 
-        [<ReflectedDefinition>]
         member this.Map (f: 'T -> 'U) =
             match this with
             | Empty -> Empty
@@ -56,12 +54,12 @@ module Tree =
             | Fork (left, right) ->
                 Fork (left.Map f, right.Map f)
 
+    [<JavaScript>]
     type Edit<'T> =
         | Replace of Tree<'T>
         | Left of Edit<'T>
         | Right of Edit<'T>
 
-        [<ReflectedDefinition>]
         member this.Sequence =
             match this with
             | Replace tree -> tree.Sequence
@@ -69,16 +67,14 @@ module Tree =
             | Right edit -> edit.Sequence
 
         interface IEnumerable with
-            [<ReflectedDefinition>]
             member this.GetEnumerator() =
                 this.Sequence.GetEnumerator() :> _
 
         interface IEnumerable<'T> with
-            [<ReflectedDefinition>]
             member this.GetEnumerator() =
                 this.Sequence.GetEnumerator()
 
-    [<ReflectedDefinition>]
+    [<JavaScript>]
     let ShowEdit (edit: Edit<'T>) : string =
         let rec showE (edit: Edit<'T>)=
             match edit with
@@ -89,7 +85,7 @@ module Tree =
                 "Right > " + (showE r)
         showE edit
 
-    [<ReflectedDefinition>]
+    [<JavaScript>]
     let Count (t: Tree<'T>) : int =
         let rec count n (t: list<Tree<'T>>) = function
             | Fork (a, b) ->
@@ -104,7 +100,7 @@ module Tree =
                 | t :: ts -> count (n + k) ts t
         count 0 [] t
 
-    [<ReflectedDefinition>]
+    [<JavaScript>]
     let Range (edit: Edit<'T>) (input: Tree<'T>) : int * int =
         let rec range (edit: Edit<'T>) (input: Tree<'T>) offset =
             match edit with
@@ -122,7 +118,7 @@ module Tree =
 
 
     // Creates a tree from a sequence of trees.
-    [<ReflectedDefinition>]
+    [<JavaScript>]
     let FromSequence (vs: seq<'T>) =
         (Tree.Empty, vs)
         ||> Seq.fold (fun state v ->
@@ -130,7 +126,7 @@ module Tree =
         )
 
     // Returns the tree replaced by applying the edit operation.
-    [<ReflectedDefinition>]
+    [<JavaScript>]
     let rec ReplacedTree (edit: Edit<'T>) (input: Tree<'T>) =
         match edit with
         | Replace output ->
@@ -149,7 +145,7 @@ module Tree =
                 ReplacedTree (Right edit) (Fork (tree, Empty))
 
 
-    [<ReflectedDefinition>]
+    [<JavaScript>]
     let Apply (edit: Edit<'T>) (input: Tree<'T>) : Tree<'T> =
         let rec apply (edit: Edit<'T>) input =
             match edit with
@@ -169,27 +165,27 @@ module Tree =
                     apply (Right edit) (Fork (tree, Empty))
         apply edit input
 
-    [<ReflectedDefinition>]
+    [<JavaScript>]
     let Set (value: 'T) = Replace (Leaf value)
 
-    [<ReflectedDefinition>]
+    [<JavaScript>]
     let rec Transform (f: Tree<'T> -> Tree<'U>) (edit: Edit<'T>) : Edit<'U> =
         match edit with
         | Replace t -> Replace (f t)
         | Left e    -> Left <| Transform f e
         | Right e   -> Right <| Transform f e
 
-    [<ReflectedDefinition>]
+    [<JavaScript>]
     let Delete<'T> () : Edit<'T> = Replace Empty
 
-    [<ReflectedDefinition>]
+    [<JavaScript>]
     let FlipEdit edit =
         match edit with
         | Replace t -> Replace t
         | Left e    -> Right e
         | Right e   -> Left e
 
-    [<ReflectedDefinition>]
+    [<JavaScript>]
     let rec DeepFlipEdit edit =
         match edit with
         | Replace t -> Replace t

@@ -19,9 +19,12 @@
 // $end{copyright}
 
 namespace IntelliFactory.Formlets.Base
+
+open WebSharper
 open System
 open IntelliFactory.Reactive
 
+[<JavaScript>]
 type IFormlet<'B, 'T> =
     abstract member Layout : Layout<'B>
     abstract member Build : unit -> Form<'B, 'T>
@@ -46,11 +49,11 @@ type private Formlet<'B,'T> =
         Utils : Utils<'B>
     }
     interface IFormlet<'B,'T> with
-        [<ReflectedDefinition>]
+        [<JavaScript>]
         member this.Layout = this.Layout
-        [<ReflectedDefinition>]
+        [<JavaScript>]
         member this.Build () = this.Build ()
-        [<ReflectedDefinition>]
+        [<JavaScript>]
         member this.MapResult (f : Result<'T> -> Result<'U>) =
             {
                 Layout = this.Layout
@@ -69,13 +72,12 @@ type private Formlet<'B,'T> =
 
 
 /// Defines formlets and their operations.
-type FormletProvider<'B> [<ReflectedDefinition>] (U: Utils<'B>) =
+[<JavaScript>]
+type FormletProvider<'B> (U: Utils<'B>) =
 
-    [<ReflectedDefinition>]
     let L = new LayoutUtils({Reactive = U.Reactive})
 
     /// Builds the form and applies the layout.
-    [<ReflectedDefinition>]
     member this.BuildForm(formlet: IFormlet<'B,'T>) =
         let form = formlet.Build()
         match formlet.Layout.Apply form.Body with
@@ -88,11 +90,9 @@ type FormletProvider<'B> [<ReflectedDefinition>] (U: Utils<'B>) =
             }
 
     /// Creates a new formlet with the default layout.
-    [<ReflectedDefinition>]
     member this.New build =
         { Build = build; Layout = L.Default<'B>(); Utils = U } :> IFormlet<_,_>
 
-    [<ReflectedDefinition>]
     member this.FromState<'T> (state: IObservable<Result<'T>>) : IFormlet<'B,'T> =
         this.New <| fun () ->
             {
@@ -103,7 +103,6 @@ type FormletProvider<'B> [<ReflectedDefinition>] (U: Utils<'B>) =
             }
 
     /// Specifies the layout.
-    [<ReflectedDefinition>]
     member this.WithLayout layout (formlet : IFormlet<'B,'T>) : IFormlet<'B, 'T> =
         {
             Layout = layout
@@ -112,7 +111,6 @@ type FormletProvider<'B> [<ReflectedDefinition>] (U: Utils<'B>) =
         }
         :> IFormlet<_,_>
 
-    [<ReflectedDefinition>]
     member this.InitWith (value: 'T) (formlet: IFormlet<'B,'T>) : IFormlet<'B,'T> =
         this.New <| fun () ->
             let form = formlet.Build ()
@@ -121,7 +119,6 @@ type FormletProvider<'B> [<ReflectedDefinition>] (U: Utils<'B>) =
             {form with State = state}
         |> this.WithLayout formlet.Layout
 
-    [<ReflectedDefinition>]
     member this.ReplaceFirstWithFailure (formlet: IFormlet<'B,'T>) : IFormlet<'B,'T> =
         this.New <| fun () ->
             let form = formlet.Build ()
@@ -132,7 +129,6 @@ type FormletProvider<'B> [<ReflectedDefinition>] (U: Utils<'B>) =
 
         |> this.WithLayout formlet.Layout
 
-    [<ReflectedDefinition>]
     member this.InitWithFailure (formlet: IFormlet<'B,'T>) : IFormlet<'B,'T> =
         this.New <| fun () ->
             let form = formlet.Build ()
@@ -143,7 +139,6 @@ type FormletProvider<'B> [<ReflectedDefinition>] (U: Utils<'B>) =
         |> this.WithLayout formlet.Layout
 
     /// Maps the body.
-    [<ReflectedDefinition>]
     member this.ApplyLayout (formlet: IFormlet<'B,'T>) : IFormlet<'B,'T> =
         this.New <| fun () ->
             let form = formlet.Build ()
@@ -156,13 +151,11 @@ type FormletProvider<'B> [<ReflectedDefinition>] (U: Utils<'B>) =
             {form with Body = body}
 
 
-    [<ReflectedDefinition>]
     member this.AppendLayout layout (formlet: IFormlet<'B,'T>) : IFormlet<'B,'T> =
         this.ApplyLayout formlet
         |> this.WithLayout layout
 
     /// Maps the body.
-    [<ReflectedDefinition>]
     member this.MapBody (f : 'B -> 'B) (formlet: IFormlet<'B,'T>) : IFormlet<'B,'T> =
         let layout =
             {
@@ -176,12 +169,10 @@ type FormletProvider<'B> [<ReflectedDefinition>] (U: Utils<'B>) =
             }
         this.WithLayout layout formlet
 
-    [<ReflectedDefinition>]
     member this.WithLayoutOrDefault (formlet: IFormlet<'B,'T>) : IFormlet<'B,'T> =
         this.MapBody id formlet
 
     /// Maps the result.
-    [<ReflectedDefinition>]
     member this.MapResult<'T,'U> (f: Result<'T> -> Result<'U>)
                             (formlet: IFormlet<'B,'T>) : IFormlet<'B,'U>  =
         {
@@ -199,12 +190,10 @@ type FormletProvider<'B> [<ReflectedDefinition>] (U: Utils<'B>) =
         } :> IFormlet<_,_>
 
     /// Maps the value.
-    [<ReflectedDefinition>]
     member this.Map (f: 'T -> 'U) (formlet: IFormlet<'B, 'T>) : IFormlet<'B, 'U> =
         this.MapResult (Result.Map f) formlet
 
     /// Applicative style of application for formlets.
-    [<ReflectedDefinition>]
     member this.Apply (f: IFormlet<'B, 'T -> 'U>) (x: IFormlet<'B,'T>) : IFormlet<'B,'U> =
         this.New <| fun () ->
             let f = this.BuildForm(f)
@@ -224,7 +213,6 @@ type FormletProvider<'B> [<ReflectedDefinition>] (U: Utils<'B>) =
                 State   = state
             }
 
-    [<ReflectedDefinition>]
     member this.Return<'T> (x: 'T) : IFormlet<'B,'T>  =
         this.New <| fun () ->
             {
@@ -235,7 +223,6 @@ type FormletProvider<'B> [<ReflectedDefinition>] (U: Utils<'B>) =
             }
 
 
-    [<ReflectedDefinition>]
     member this.Fail<'T> fs : Form<'B, 'T> =
         {
             Body    = U.Reactive.Never ()
@@ -244,11 +231,9 @@ type FormletProvider<'B> [<ReflectedDefinition>] (U: Utils<'B>) =
             State   = U.Reactive.Return (Failure fs)
         }
 
-    [<ReflectedDefinition>]
     member this.FailWith<'T> fs : IFormlet<'B,'T> =
         this.New <| fun () -> this.Fail<'T> fs
 
-    [<ReflectedDefinition>]
     member this.ReturnEmpty (x: 'T) =
         this.New <| fun () ->
             {
@@ -258,7 +243,6 @@ type FormletProvider<'B> [<ReflectedDefinition>] (U: Utils<'B>) =
                 State   = U.Reactive.Return (Success x)
             }
 
-    [<ReflectedDefinition>]
     member this.Never<'T> () : IFormlet<'B,'T> =
         this.New <| fun () ->
             {
@@ -268,7 +252,6 @@ type FormletProvider<'B> [<ReflectedDefinition>] (U: Utils<'B>) =
                 State   = U.Reactive.Never()
             }
 
-    [<ReflectedDefinition>]
     member this.Empty<'T> () : IFormlet<'B,'T> =
         this.New <| fun () ->
             {
@@ -280,7 +263,6 @@ type FormletProvider<'B> [<ReflectedDefinition>] (U: Utils<'B>) =
 
 
     /// Constructs an empty form.
-    [<ReflectedDefinition>]
     member private this.EmptyForm () : Form<'B, 'T> =
         {
             Body    = U.Reactive.Never()
@@ -289,7 +271,6 @@ type FormletProvider<'B> [<ReflectedDefinition>] (U: Utils<'B>) =
             State   = U.Reactive.Never ()
         }
 
-    [<ReflectedDefinition>]
     member this.Join (formlet: IFormlet<'B, IFormlet<'B, 'T>>) : IFormlet<'B, 'T> =
         this.New <| fun () ->
             let form1 = this.BuildForm(formlet)
@@ -323,7 +304,6 @@ type FormletProvider<'B> [<ReflectedDefinition>] (U: Utils<'B>) =
 
             { Body = body; Notify = notify; Dispose = dispose; State = state}
 
-    [<ReflectedDefinition>]
     member this.Switch (formlet: IFormlet<'B, IFormlet<'B, 'T>>) : IFormlet<'B, 'T> =
         this.New <| fun () ->
             let formlet =
@@ -364,7 +344,6 @@ type FormletProvider<'B> [<ReflectedDefinition>] (U: Utils<'B>) =
 
     /// Flips the stream of body edit operations so that each left
     /// branch becomes a right branch and vice versa.
-    [<ReflectedDefinition>]
     member this.FlipBody (formlet: IFormlet<'B,'T>) : IFormlet<'B,'T> =
         this.New <| fun () ->
             let form = formlet.Build()
@@ -374,7 +353,6 @@ type FormletProvider<'B> [<ReflectedDefinition>] (U: Utils<'B>) =
         |> this.WithLayout formlet.Layout
 
     /// Collects all values from nested formlets.
-    [<ReflectedDefinition>]
     member this.SelectMany (formlet: IFormlet<'B, IFormlet<'B, 'T>>) : IFormlet<'B,list<'T>> =
         this.New <| fun () ->
             let form1 = this.BuildForm formlet
@@ -419,7 +397,6 @@ type FormletProvider<'B> [<ReflectedDefinition>] (U: Utils<'B>) =
 
 
     /// Constructs a formlet with a handler to it's notification channel.
-    [<ReflectedDefinition>]
     member this.WithNotificationChannel<'T> (formlet: IFormlet<'B,'T>)
                                 : IFormlet<'B,'T * (obj -> unit)>  =
         this.New <| fun () ->
@@ -435,7 +412,6 @@ type FormletProvider<'B> [<ReflectedDefinition>] (U: Utils<'B>) =
         |> this.WithLayout formlet.Layout
 
 
-    [<ReflectedDefinition>]
     member this.Replace (formlet: IFormlet<'B,'T1>) (f: 'T1 -> IFormlet<'B,'T2>) : IFormlet<'B, 'T2> =
         // TODO: Think!
         formlet
@@ -444,7 +420,6 @@ type FormletProvider<'B> [<ReflectedDefinition>] (U: Utils<'B>) =
         )
         |> this.Switch
 
-    [<ReflectedDefinition>]
     member this.Deletable(formlet: IFormlet<'B,option<'T>>) : IFormlet<'B, option<'T>> =
         this.Replace formlet (fun value ->
             match value with
@@ -454,7 +429,6 @@ type FormletProvider<'B> [<ReflectedDefinition>] (U: Utils<'B>) =
                 this.Return (Some value)
         )
 
-    [<ReflectedDefinition>]
     member this.WithCancelation (formlet: IFormlet<'B,'T>) cancelFormlet : IFormlet<'B,option<'T>> =
         let compose (r1:Result<'T>) (r2: Result<unit>) : Result<option<'T>> =
             match r1, r2 with
@@ -472,11 +446,9 @@ type FormletProvider<'B> [<ReflectedDefinition>] (U: Utils<'B>) =
         this.Apply f f3
         |> this.MapResult Result.Join
 
-    [<ReflectedDefinition>]
     member this.Bind<'T1, 'T2> (formlet: IFormlet<'B,'T1>) (f: 'T1 -> IFormlet<'B,'T2>) : IFormlet<'B, 'T2> =
         formlet |> this.Map f |> this.Join
 
-    [<ReflectedDefinition>]
     member this.Delay (f: unit -> IFormlet<'B,'T>) : IFormlet<'B,'T> =
         {
             Build = fun () -> this.BuildForm(f())
@@ -486,7 +458,6 @@ type FormletProvider<'B> [<ReflectedDefinition>] (U: Utils<'B>) =
 
     /// Given a sequence of formlets returns a composed formlet
     /// producing a list of values.
-    [<ReflectedDefinition>]
     member this.Sequence<'B,'T> (fs : seq<IFormlet<'B,'T>>) : IFormlet<'B,List<'T>> =
         let fs = List.ofSeq fs
         match fs with
@@ -498,19 +469,16 @@ type FormletProvider<'B> [<ReflectedDefinition>] (U: Utils<'B>) =
             this.Apply (this.Apply fComp f) fRest
 
     /// Returns with lifted result type.
-    [<ReflectedDefinition>]
     member this.LiftResult<'T> (formlet: IFormlet<'B,'T>) : IFormlet<'B,Result<'T>> =
         this.MapResult Success formlet
 
     /// Constructs a formlet with an extra notification action.
-    [<ReflectedDefinition>]
     member this.WithNotification (notify: obj -> unit) (formlet: IFormlet<'B,'T>) : IFormlet<'B,'T>  =
         this.New <| fun () ->
             let form = this.BuildForm(formlet)
             {form with Notify = fun obj -> form.Notify obj; notify obj}
         |> this.WithLayout formlet.Layout
 
-    [<ReflectedDefinition>]
     member this.BindWith (hF: 'B -> 'B -> 'B)  (formlet: IFormlet<'B,'T>) (f: 'T -> IFormlet<'B,'U>) : IFormlet<'B,'U> =
         this.New <| fun () ->
             let formlet = this.Bind formlet f
@@ -539,13 +507,10 @@ type FormletProvider<'B> [<ReflectedDefinition>] (U: Utils<'B>) =
                     U.Reactive.Never ()
             {form with Body = combB}
 
-type FormletBuilder<'B>[<ReflectedDefinition>](F: FormletProvider<'B>) =
-    [<ReflectedDefinition>]
+[<JavaScript>]
+type FormletBuilder<'B>[<JavaScript>](F: FormletProvider<'B>) =
     member this.Return x = F.Return x
-    [<ReflectedDefinition>]
     member this.Bind(x, f) = F.Bind x f
-    [<ReflectedDefinition>]
     member this.Delay f = F.Delay f
-    [<ReflectedDefinition>]
     member this.ReturnFrom f = f
 
