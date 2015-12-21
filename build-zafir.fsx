@@ -39,8 +39,8 @@ let tests =
         .SourcesFromProject()
         .References(fun r ->
             [
-                r.NuGet("Zafir.Reactive").Reference()
-                r.NuGet("Zafir.Html").Reference()
+                r.NuGet("Zafir.Reactive").Latest(true).ForceFoundVersion().Reference()
+                r.NuGet("Zafir.Html").Latest(true).ForceFoundVersion().Reference()
                 r.Project if_formlets
                 r.Project ws_formlets
             ])
