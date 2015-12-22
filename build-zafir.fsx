@@ -12,7 +12,7 @@ let if_formlets =
         .SourcesFromProject()
         .References(fun r ->
             [
-                r.NuGet("Zafir.Reactive").ForceFoundVersion().Reference()
+                r.NuGet("Zafir.Reactive").Latest(true).ForceFoundVersion().Reference()
             ])
 
 let ws_formlets =
@@ -20,8 +20,8 @@ let ws_formlets =
         .SourcesFromProject()
         .References(fun r ->
             [
-                r.NuGet("Zafir.Reactive").ForceFoundVersion().Reference()
-                r.NuGet("Zafir.Html").ForceFoundVersion().Reference()
+                r.NuGet("Zafir.Reactive").Latest(true).ForceFoundVersion().Reference()
+                r.NuGet("Zafir.Html").Latest(true).ForceFoundVersion().Reference()
                 r.Project if_formlets
             ])
         .Embed(
@@ -39,8 +39,8 @@ let tests =
         .SourcesFromProject()
         .References(fun r ->
             [
-                r.NuGet("Zafir.Reactive").Reference()
-                r.NuGet("Zafir.Html").Reference()
+                r.NuGet("Zafir.Reactive").Latest(true).ForceFoundVersion().Reference()
+                r.NuGet("Zafir.Html").Latest(true).ForceFoundVersion().Reference()
                 r.Project if_formlets
                 r.Project ws_formlets
             ])
