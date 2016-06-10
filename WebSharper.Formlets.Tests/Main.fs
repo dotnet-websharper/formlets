@@ -51,11 +51,11 @@ module BF =
             Utils : Utils<'B>
         }
         interface IFormlet<'B,'T> with
-            [<ReflectedDefinition>]
+            [<JavaScript>]
             member this.Layout = this.Layout
-            [<ReflectedDefinition>]
+            [<JavaScript>]
             member this.Build () = this.Build ()
-            [<ReflectedDefinition>]
+            [<JavaScript>]
             member this.MapResult (f : Result<'T> -> Result<'U>) =
                 {
                     Layout = this.Layout

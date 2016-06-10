@@ -25,6 +25,7 @@ open WebSharper
 [<JavaScript>]
 type IValidatorProvider =
     // abstract Validate<'T, 'F when 'F :> IFormlet<'B,'T>> : ('T -> bool) ->  string -> 'F -> 'F
+    [<Name "Matches">]
     abstract Matches : string -> string -> bool
 
 [<JavaScript>]
