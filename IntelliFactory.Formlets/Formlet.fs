@@ -26,13 +26,13 @@ open IntelliFactory.Reactive
 
 [<JavaScript>]
 type IFormlet<'B, 'T> =
-    [<Name "Layout">]
+    [<Name "LayoutI">]
     abstract member Layout : Layout<'B>
-    [<Name "Build">]
+    [<Name "BuildI">]
     abstract member Build : unit -> Form<'B, 'T>
     // The type of the returned value should
     // be equal to the type of the object itself.
-    [<Name "MapResult">]
+    [<Name "MapResultI">]
     abstract member MapResult<'U> : (Result<'T> -> Result<'U>) -> IFormlet<'B,'T>
 
 // Specify IReactive implementation and default layout.
@@ -43,6 +43,7 @@ type Utils<'B> =
     }
 
 // Generic formlet type.
+[<JavaScript>]
 type private Formlet<'B,'T> =
     {
         /// The layout manager.
@@ -52,11 +53,8 @@ type private Formlet<'B,'T> =
         Utils : Utils<'B>
     }
     interface IFormlet<'B,'T> with
-        [<JavaScript>]
         member this.Layout = this.Layout
-        [<JavaScript>]
         member this.Build () = this.Build ()
-        [<JavaScript>]
         member this.MapResult (f : Result<'T> -> Result<'U>) =
             {
                 Layout = this.Layout
