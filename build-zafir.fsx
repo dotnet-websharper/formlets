@@ -10,6 +10,7 @@ let bt =
 let if_formlets =
     bt.Zafir.Library("IntelliFactory.Formlets")
         .SourcesFromProject()
+        .WithSourceMap()
         .References(fun r ->
             [
                 r.NuGet("Zafir.Reactive").Latest(true).ForceFoundVersion().Reference()
@@ -18,6 +19,7 @@ let if_formlets =
 let ws_formlets =
     bt.Zafir.Library("WebSharper.Formlets")
         .SourcesFromProject()
+        .WithSourceMap()
         .References(fun r ->
             [
                 r.NuGet("Zafir.Reactive").Latest(true).ForceFoundVersion().Reference()
@@ -37,6 +39,7 @@ let ws_formlets =
 let tests =
     bt.Zafir.Library("WebSharper.Formlets.Tests")
         .SourcesFromProject()
+        .WithSourceMap()
         .References(fun r ->
             [
                 r.NuGet("Zafir.Reactive").Latest(true).ForceFoundVersion().Reference()
