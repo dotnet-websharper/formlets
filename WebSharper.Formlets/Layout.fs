@@ -390,7 +390,11 @@ type LayoutProvider [<JavaScript>](LayoutUtils: LayoutUtils) =
 
                 let index = ref 0
                 let inserted = ref false
+#if ZAFIR
+                jqPanel.Children().Each(fun _ el ->
+#else
                 jqPanel.Children().Each(fun el ->
+#endif
                     let jqRow = JQuery.Of(el : Dom.Element)
                     if rowIx = index.Value then
                         JQuery.Of(row.Body).InsertBefore(jqRow).Ignore
@@ -439,7 +443,11 @@ type LayoutProvider [<JavaScript>](LayoutUtils: LayoutUtils) =
                 let jqPanel = JQuery.Of(row.Body)
                 let index = ref 0
                 let inserted = ref false
+#if ZAFIR
+                jqPanel.Children().Each(fun _ el ->
+#else
                 jqPanel.Children().Each(fun el ->
+#endif
                     let jqCol = JQuery.Of(el : Dom.Element)
                     if rowIx = index.Value then
                         JQuery.Of(newCol.Body).InsertBefore(jqCol).Ignore
