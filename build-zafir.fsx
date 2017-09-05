@@ -2,28 +2,28 @@
 open IntelliFactory.Build
 
 let bt =
-    BuildTool().PackageId("Zafir.Formlets")
-        .VersionFrom("Zafir")
+    BuildTool().PackageId("WebSharper.Formlets")
+        .VersionFrom("WebSharper")
         .WithFSharpVersion(FSharpVersion.FSharp30)
         .WithFramework(fun fw -> fw.Net40)
 
 let if_formlets =
-    bt.Zafir.Library("IntelliFactory.Formlets")
+    bt.WebSharper4.Library("IntelliFactory.Formlets")
         .SourcesFromProject()
         .WithSourceMap()
         .References(fun r ->
             [
-                r.NuGet("Zafir.Reactive").Latest(true).ForceFoundVersion().Reference()
+                r.NuGet("WebSharper.Reactive").Latest(true).ForceFoundVersion().Reference()
             ])
 
 let ws_formlets =
-    bt.Zafir.Library("WebSharper.Formlets")
+    bt.WebSharper4.Library("WebSharper.Formlets")
         .SourcesFromProject()
         .WithSourceMap()
         .References(fun r ->
             [
-                r.NuGet("Zafir.Reactive").Latest(true).ForceFoundVersion().Reference()
-                r.NuGet("Zafir.Html").Latest(true).ForceFoundVersion().Reference()
+                r.NuGet("WebSharper.Reactive").Latest(true).ForceFoundVersion().Reference()
+                r.NuGet("WebSharper.Html").Latest(true).ForceFoundVersion().Reference()
                 r.Project if_formlets
             ])
         .Embed(
@@ -37,13 +37,13 @@ let ws_formlets =
             ])
 
 let tests =
-    bt.Zafir.Library("WebSharper.Formlets.Tests")
+    bt.WebSharper4.Library("WebSharper.Formlets.Tests")
         .SourcesFromProject()
         .WithSourceMap()
         .References(fun r ->
             [
-                r.NuGet("Zafir.Reactive").Latest(true).ForceFoundVersion().Reference()
-                r.NuGet("Zafir.Html").Latest(true).ForceFoundVersion().Reference()
+                r.NuGet("WebSharper.Reactive").Latest(true).ForceFoundVersion().Reference()
+                r.NuGet("WebSharper.Html").Latest(true).ForceFoundVersion().Reference()
                 r.Project if_formlets
                 r.Project ws_formlets
             ])
@@ -56,10 +56,10 @@ bt.Solution [
     bt.NuGet.CreatePackage()
         .Configure(fun c ->
             { c with
-                Title = Some "Zafir.Formlets"
+                Title = Some "WebSharper.Formlets"
                 LicenseUrl = Some "http://websharper.com/licensing"
                 ProjectUrl = Some "https://github.com/intellifactory/websharper.formlets"
-                Description = "Zafir Formlets"
+                Description = "WebSharper Formlets"
                 RequiresLicenseAcceptance = true })
         .Add(if_formlets)
         .Add(ws_formlets)
