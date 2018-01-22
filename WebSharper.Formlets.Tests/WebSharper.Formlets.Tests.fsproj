@@ -8,6 +8,7 @@
   <ItemGroup>
     <Compile Include="Tests.fs" />
     <Compile Include="Main.fs" />
+    <Compile Include="Demos.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../IntelliFactory.Formlets\IntelliFactory.Formlets.fsproj" />

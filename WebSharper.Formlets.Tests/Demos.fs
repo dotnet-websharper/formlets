@@ -22,7 +22,7 @@ namespace WebSharper.Formlet.Test
 
 open WebSharper
 open WebSharper.Html
-open WebSharper.Formlet
+open WebSharper.Formlets
 
 module Demo =        
     
@@ -81,7 +81,6 @@ module Demo =
     let Main () =
         ContactFormlet ()
 
-[<JavaScriptType>]
 type FormletDemo () = 
     inherit Web.Control()
 
@@ -90,3 +89,4 @@ type FormletDemo () =
         Demo.Main ()
         |> Enhance.WithFormContainer
         |> Formlet.Run ignore
+        :> _
