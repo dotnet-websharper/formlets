@@ -21,7 +21,7 @@
 namespace WebSharper.Formlets
 
 open WebSharper
-open System.Web.UI
+open WebSharper.Core.Resources
 
 module internal Resources =
     open IntelliFactory.Formlets.Base
@@ -29,4 +29,4 @@ module internal Resources =
     /// Default CSS skin.
     [<Sealed>]
     type SkinResource() =
-        inherit Core.Resources.BaseResource("Formlet.css")
+        inherit BaseResource("Formlet.css")

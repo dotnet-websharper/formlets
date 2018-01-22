@@ -74,7 +74,7 @@ module Data =
                 let formlet = formletBase.ApplyLayout this
                 let form = formlet.Build()
                 form.State.Subscribe (fun res ->
-                    Result.Map f res |> ignore
+                    Result<_>.Map f res |> ignore
                 ) |> ignore
                 // Defaults to vertical layout
                 let el =

@@ -67,4 +67,4 @@ type Result<'T> =
                     match r with
                     | Success v -> Failure fs1
                     | Failure fs2 -> Failure (fs1 @ fs2)
-            Seq.fold merge  (Result.Success []) rs
+            Seq.fold merge  (Result<_>.Success []) rs

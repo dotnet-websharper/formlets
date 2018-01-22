@@ -1,0 +1,27 @@
+type file
+id WebSharper.Formlets
+authors
+    IntelliFactory
+owners
+    IntelliFactory
+licenseUrl http://websharper.com/licensing
+projectUrl https://github.com/intellifactory/websharper.formlets
+description
+    WebSharper Formlets
+tags
+    Web JavaScript F# C#
+files
+    ../IntelliFactory.Formlets/bin/Release/netstandard2.0/IntelliFactory.Formlets.dll ==> lib/net461
+    ../IntelliFactory.Formlets/bin/Release/netstandard2.0/IntelliFactory.Formlets.xml ==> lib/net461
+    ../IntelliFactory.Formlets/bin/Release/netstandard2.0/IntelliFactory.Formlets.dll ==> lib/netstandard2.0
+    ../IntelliFactory.Formlets/bin/Release/netstandard2.0/IntelliFactory.Formlets.xml ==> lib/netstandard2.0
+    ../WebSharper.Formlets/bin/Release/net461/WebSharper.Formlets.dll ==> lib/net461
+    ../WebSharper.Formlets/bin/Release/net461/WebSharper.Formlets.xml ==> lib/net461
+    ../WebSharper.Formlets/bin/Release/netstandard2.0/WebSharper.Formlets.dll ==> lib/netstandard2.0
+    ../WebSharper.Formlets/bin/Release/netstandard2.0/WebSharper.Formlets.xml ==> lib/netstandard2.0
+dependencies
+        WebSharper LOCKEDVERSION
+        WebSharper.Reactive LOCKEDVERSION
+        WebSharper.Html LOCKEDVERSION
+frameworkAssemblies
+        System.Web

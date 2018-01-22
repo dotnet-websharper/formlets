@@ -328,7 +328,7 @@ module Controls =
     [<JavaScript>]
     let ElementButton (genElem: unit -> Element) : Formlet<int> =
         MkFormlet <| fun () ->
-            let state = HotStream<_>.New(Result.Failure [])
+            let state = HotStream<_>.New(Result<_>.Failure [])
             let count = ref 0
             let body =
                 genElem ()

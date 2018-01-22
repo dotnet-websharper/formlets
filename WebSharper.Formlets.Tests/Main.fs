@@ -175,7 +175,7 @@ module BF =
 
     [<JavaScript>]
     let Map (f: 'T -> 'U) (formlet: IFormlet<Body, 'T>) : IFormlet<Body, 'U> =
-        MapResult (Result.Map f) formlet
+        MapResult (Result<_>.Map f) formlet
 
     [<JavaScript>]
     let Bind<'T1, 'T2> (formlet: IFormlet<Body,'T1>) (f: 'T1 -> IFormlet<Body,'T2>) : IFormlet<Body, 'T2> =

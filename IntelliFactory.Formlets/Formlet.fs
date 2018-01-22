@@ -192,7 +192,7 @@ type FormletProvider<'B> (U: Utils<'B>) =
 
     /// Maps the value.
     member this.Map (f: 'T -> 'U) (formlet: IFormlet<'B, 'T>) : IFormlet<'B, 'U> =
-        this.MapResult (Result.Map f) formlet
+        this.MapResult (Result<_>.Map f) formlet
 
     /// Applicative style of application for formlets.
     member this.Apply (f: IFormlet<'B, 'T -> 'U>) (x: IFormlet<'B,'T>) : IFormlet<'B,'U> =
@@ -205,7 +205,7 @@ type FormletProvider<'B> (U: Utils<'B>) =
                 U.Reactive.Merge left right
             let state =
                 U.Reactive.CombineLatest x.State f.State ( fun r f ->
-                    Result.Apply f r
+                    Result<_>.Apply f r
                 )
             {
                 Body    = body
@@ -386,7 +386,7 @@ type FormletProvider<'B> (U: Utils<'B>) =
 
             let state =
                 let stateStream = U.Reactive.Select formStream (fun f -> f.State)
-                U.Reactive.Select (U.Reactive.CollectLatest stateStream) Result.Sequence
+                U.Reactive.Select (U.Reactive.CollectLatest stateStream) Result<_>.Sequence
 
             let notify o =
                 form1.Notify o
@@ -403,7 +403,7 @@ type FormletProvider<'B> (U: Utils<'B>) =
         this.New <| fun () ->
             let form = formlet.Build ()
             let state =
-                U.Reactive.Select form.State (Result.Map(fun v -> (v, form.Notify)))
+                U.Reactive.Select form.State (Result<_>.Map(fun v -> (v, form.Notify)))
             {
                 Body    = form.Body
                 Notify  = form.Notify
@@ -445,7 +445,7 @@ type FormletProvider<'B> (U: Utils<'B>) =
         let f3 = this.LiftResult cancelFormlet
         let f = this.Apply f1 f2
         this.Apply f f3
-        |> this.MapResult Result.Join
+        |> this.MapResult Result<_>.Join
 
     member this.Bind<'T1, 'T2> (formlet: IFormlet<'B,'T1>) (f: 'T1 -> IFormlet<'B,'T2>) : IFormlet<'B, 'T2> =
         formlet |> this.Map f |> this.Join

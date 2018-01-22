@@ -53,7 +53,7 @@ module Enhance =
                 | _         -> ()
             return v
         }
-        |> Formlet.MapResult Result.Join
+        |> Formlet.MapResult Result<_>.Join
         |> PropagateRenderFrom formlet
         |> OfIFormlet
 
@@ -85,7 +85,7 @@ module Enhance =
             let! s = submit v
             return v
         }
-        |> Formlet.MapResult Result.Join
+        |> Formlet.MapResult Result<_>.Join
         |> PropagateRenderFrom formlet
         |> OfIFormlet
 
@@ -245,7 +245,7 @@ module Enhance =
             let! _ = valid res
             return res
         }
-        |> Formlet.MapResult Result.Join
+        |> Formlet.MapResult Result<_>.Join
         |> Formlet.WithLayout Layout.Horizontal
 
 
@@ -399,7 +399,7 @@ module Enhance =
                     errrFormlet fs
                     |> Formlet.Map (fun _ -> res)
         }
-        |> Formlet.MapResult Result.Join
+        |> Formlet.MapResult Result<_>.Join
 
     /// Creates a formlet wrapped inside a validation frame reflecting the state of the
     /// formlet using the default validation frame configuration settings.
@@ -423,7 +423,7 @@ module Enhance =
                         return res
                     }
         }
-        |> Formlet.MapResult Result.Join
+        |> Formlet.MapResult Result<_>.Join
 
     /// Enhances a formlet with a label component.
     [<JavaScript>]
