@@ -20,8 +20,8 @@ files
     ../WebSharper.Formlets/bin/Release/netstandard2.0/WebSharper.Formlets.dll ==> lib/netstandard2.0
     ../WebSharper.Formlets/bin/Release/netstandard2.0/WebSharper.Formlets.xml ==> lib/netstandard2.0
 dependencies
-        WebSharper LOCKEDVERSION
-        WebSharper.Reactive LOCKEDVERSION
-        WebSharper.Html LOCKEDVERSION
+        WebSharper ~> LOCKEDVERSION/3
+        WebSharper.Reactive ~> LOCKEDVERSION/3
+        WebSharper.Html ~> LOCKEDVERSION/3
 frameworkAssemblies
         System.Web
