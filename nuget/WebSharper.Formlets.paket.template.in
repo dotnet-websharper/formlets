@@ -11,8 +11,8 @@ description
 tags
     Web JavaScript F# C#
 files
-    ../IntelliFactory.Formlets/bin/Release/netstandard2.0/IntelliFactory.Formlets.dll ==> lib/net461
-    ../IntelliFactory.Formlets/bin/Release/netstandard2.0/IntelliFactory.Formlets.xml ==> lib/net461
+    ../IntelliFactory.Formlets/bin/Release/net461/IntelliFactory.Formlets.dll ==> lib/net461
+    ../IntelliFactory.Formlets/bin/Release/net461/IntelliFactory.Formlets.xml ==> lib/net461
     ../IntelliFactory.Formlets/bin/Release/netstandard2.0/IntelliFactory.Formlets.dll ==> lib/netstandard2.0
     ../IntelliFactory.Formlets/bin/Release/netstandard2.0/IntelliFactory.Formlets.xml ==> lib/netstandard2.0
     ../WebSharper.Formlets/bin/Release/net461/WebSharper.Formlets.dll ==> lib/net461
