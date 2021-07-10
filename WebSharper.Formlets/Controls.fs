@@ -31,7 +31,7 @@ module Controls =
     open IntelliFactory.Reactive
 
     [<JavaScript>]
-    let private SelectControl<'T> (readOnly: bool) (def: int) (vls: list<string * 'T>) : Formlet<'T> =
+    let private SelectControl<'T> (readOnly: bool) (def: int option) (vls: list<string * 'T>) : Formlet<'T> =
         MkFormlet <| fun () ->
 
             // Index based value dictionary.
@@ -40,9 +40,10 @@ module Controls =
 
             // Find the index of the default value
             let sIx =
-                if def >= 0 && def < vls.Length then
+                match def with
+                | Some def when def >= 0 && def < vls.Length ->
                     def
-                else
+                | _ ->
                     0
             // Selection box
             let body =
@@ -81,14 +82,14 @@ module Controls =
     /// creates a select box control. The formlet produces a value corresponding to
     /// the selected radio button.
     [<JavaScript>]
-    let Select<'T> (def: int) (vls: list<string * 'T>) : Formlet<'T> =
+    let Select<'T> (def: int option) (vls: list<string * 'T>) : Formlet<'T> =
         SelectControl false def vls
 
     /// Given an optional value for the default selected index and a list of name and value pairs,
     /// creates a select box control. The formlet produces a value corresponding to
     /// the selected radio button.
     [<JavaScript>]
-    let ReadOnlySelect<'T> (def: int) (vls: list<string * 'T>) : Formlet<'T> =
+    let ReadOnlySelect<'T> (def: int option) (vls: list<string * 'T>) : Formlet<'T> =
         SelectControl true def vls
 
 
